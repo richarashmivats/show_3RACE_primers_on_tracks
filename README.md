@@ -1,6 +1,6 @@
 # show_3RACE_primers_on_tracks
 
-This document describes the usage of a simple pipeline to align 3'RACE primer sequences to the human genome (hg38), convert alignment files, and generate BED format coordinates for visualization on genomic tracks or further analysis.
+This document describes the usage of a simple pipeline to align 3'RACE primer sequences to the human genome, convert alignment files, and generate BED format coordinates for visualization on genomic tracks or further analysis.
 
 ---
 
@@ -9,8 +9,8 @@ This document describes the usage of a simple pipeline to align 3'RACE primer se
 - **Bowtie2** installed and accessible in your PATH  
 - **Samtools** installed and accessible  
 - **Bedtools** installed and accessible  
-- Indexed hg38 reference genome for Bowtie2 located at:  
-  `/path/to/bowtie2_index/hg38`  
+- Indexed reference genome for Bowtie2 located at:  
+  `/path/to/bowtie2_index`  
 - Primer sequences in FASTA format prepared in `/path/to/fasta_files/`  
 - Output directories:  
   - SAM and BAM files in `/path/to/bams/`  
@@ -20,24 +20,25 @@ This document describes the usage of a simple pipeline to align 3'RACE primer se
 
 ## Pipeline Description
 
-This pipeline takes a primer FASTA file (containing forward and reverse primers), aligns the primers to the hg38 reference genome using Bowtie2, converts the alignments from SAM to BAM format using samtools, and converts the BAM alignments to BED format using bedtools.
+This pipeline takes a primer FASTA file (containing forward and reverse primers), aligns the primers to the reference genome using Bowtie2 (example file is aligned to hg38), converts the alignments from SAM to BAM format using samtools, and converts the BAM alignments to BED format using bedtools.
 
 ---
 
 ## Commands
 
-file_name="example"
+`file_name="example"`
 
-Align primers to hg38 with Bowtie2, output SAM file
-bowtie2 -x /path/to/bowtie2_index/hg38
--f /path/to/fasta_files/${file_name}.fasta
--S ./bams/${file_name}.sam
+**Align primers to hg38 with Bowtie2, output SAM file**
 
-Convert SAM to BAM with header
-samtools view -b -h ./bams/${file_name}.sam > ./bams/${file_name}.bam
+`bowtie2 -x /path/to/bowtie2_index -f /path/to/fasta_files/${file_name}.fasta -S /path/to/bams/${file_name}.sam`
 
-Convert BAM to BED format
-bedtools bamtobed -i ./bams/${file_name}.bam > ./bed_files/${file_name}.bed
+**Convert SAM to BAM with header**
+
+`samtools view -b -h /path/to/bams/${file_name}.sam > /path/to/bams/${file_name}.bam`
+
+**Convert BAM to BED format**
+
+`bedtools bamtobed -i /path/to/bams/${file_name}.bam > /path/to/bed_files/${file_name}.bed`
 
 ---
 
